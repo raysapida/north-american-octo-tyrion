@@ -3,14 +3,6 @@
 ###
 
 # Time.zone = "UTC"
-activate :deploy do |deploy|
-  deploy.method = :git
-  # Optional Settings
-  # deploy.remote   = 'custom-remote' # remote name or git url, default: origin
-  # deploy.branch   = 'custom-branch' # default: gh-pages
-  # deploy.strategy = :submodule      # commit strategy: can be :force_push or :submodule, default: :force_push
-  # deploy.commit_message = 'custom-message'      # commit message (can be empty), default: Automated commit at `timestamp` by middleman-deploy `version`
-end
 
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
@@ -18,8 +10,8 @@ activate :blog do |blog|
 
   # blog.permalink = "{year}/{month}/{day}/{title}.html"
   # Matcher for blog source files
-  # blog.sources = "{year}-{month}-{day}-{title}.html"
-  # blog.taglink = "tags/{tag}.html"
+  blog.sources = "articles/{year}-{month}-{day}-{title}.html"
+  blog.taglink = "tag/{tag}.html"
   # blog.layout = "layout"
   # blog.summary_separator = /(READMORE)/
   # blog.summary_length = 250
@@ -29,15 +21,47 @@ activate :blog do |blog|
   # blog.default_extension = ".markdown"
 
   blog.tag_template = "tag.html"
-  blog.calendar_template = "calendar.html"
+  # blog.calendar_template = "calendar.html"
 
   # Enable pagination
-  # blog.paginate = true
+  blog.paginate = true
   # blog.per_page = 10
   # blog.page_link = "page/{num}"
 end
 
-page "/feed.xml", layout: false
+set :casper, {
+  blog: {
+    url: 'http://www.example.com',
+    name: 'Middleman',
+    description: 'Makes developing websites simple.',
+    date_format: '%d %B %Y',
+    logo: nil # Optional
+  },
+  author: {
+    name: 'Middleman',
+    bio: 'Middleman is a static site generator using all the ' \
+         'shortcuts and tools in modern web development.',
+    location: nil, # Optional
+    website: nil, # Optional
+    gravatar_email: nil # Optional
+  }
+}
+
+page '/feed.xml', layout: false
+page '/sitemap.xml', layout: false
+
+ignore '/partials/*'
+
+ready do
+  blog.tags.each do |tag, articles|
+    proxy "/tag/#{tag.downcase.parameterize}/feed.xml", '/feed.xml', layout: false do
+      @tagname = tag
+      @articles = articles[0..5]
+    end
+  end
+
+  proxy "/author/#{blog_author.name.parameterize}.html", '/author.html', ignore: true
+end
 
 ###
 # Compass
@@ -77,9 +101,16 @@ page "/feed.xml", layout: false
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-configure :development do
-  activate :livereload
-end
+activate :livereload
+
+# Pretty URLs - http://middlemanapp.com/basics/pretty-urls/
+activate :directory_indexes
+
+# Middleman-Syntax - https://github.com/middleman/middleman-syntax
+set :haml, { ugly: true }
+set :markdown_engine, :redcarpet
+set :markdown, fenced_code_blocks: true, smartypants: true
+activate :syntax, line_numbers: true
 
 # Methods defined in the helpers block are available in templates
 # helpers do
@@ -94,7 +125,7 @@ set :js_dir, 'javascripts'
 
 set :images_dir, 'images'
 
-set :build_dir, 'tmp'
+set :partials_dir, 'partials'
 
 # Build-specific configuration
 configure :build do
