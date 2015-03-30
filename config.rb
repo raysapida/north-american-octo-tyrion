@@ -9,6 +9,7 @@ activate :blog do |blog|
   # blog.prefix = "blog"
 
   # blog.permalink = "{year}/{month}/{day}/{title}.html"
+  blog.permalink = "{title}.html"
   # Matcher for blog source files
   blog.sources = "articles/{year}-{month}-{day}-{title}.html"
   blog.taglink = "tag/{tag}.html"
@@ -31,16 +32,15 @@ end
 
 set :casper, {
   blog: {
-    url: 'http://www.example.com',
-    name: 'Middleman',
-    description: 'Makes developing websites simple.',
+    url: 'http://www.raysapida.github.io',
+    name: 'Blog',
+    description: 'Web Development using Ruby',
     date_format: '%d %B %Y',
     logo: nil # Optional
   },
   author: {
-    name: 'Middleman',
-    bio: 'Middleman is a static site generator using all the ' \
-         'shortcuts and tools in modern web development.',
+    name: 'Raymond Sapida',
+    bio: 'Aspiring Web Developer',
     location: nil, # Optional
     website: nil, # Optional
     gravatar_email: nil # Optional
