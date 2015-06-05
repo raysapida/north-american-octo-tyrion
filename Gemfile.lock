@@ -8,6 +8,13 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.8)
+    bitters (1.0.0)
+      bourbon (>= 3.2)
+      sass (>= 3.2)
+      thor
+    bourbon (4.2.3)
+      sass (~> 3.4)
+      thor
     builder (3.2.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
@@ -94,6 +101,9 @@ GEM
     mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.11.0)
+    neat (1.7.2)
+      bourbon (>= 4.0)
+      sass (>= 3.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     nokogiri (1.6.6.2-x86-mingw32)
@@ -148,11 +158,14 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  bitters
+  bourbon
   builder (~> 3.2.2)
   middleman (~> 3.3.10)
   middleman-blog (~> 3.5.3)
   middleman-livereload (~> 3.4.2)
   middleman-syntax (~> 2.0.0)
+  neat
   nokogiri (~> 1.6.6.2)
   redcarpet (~> 3.2.2)
   sanitize (~> 3.1.2)
